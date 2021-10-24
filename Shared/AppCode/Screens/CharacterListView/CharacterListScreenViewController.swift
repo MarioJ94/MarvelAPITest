@@ -11,10 +11,12 @@ import UIKit
 class CharacterListScreenViewController: UIViewController {
     private var presenter : CharacterListScreenPresenterProtocol
     private var model : CharacterListViewModel?
-    private var tableView : UITableView!
+    
+    private weak var tableView : UITableView?
+    private weak var errorView : UIView?
+    private weak var spinner: UIActivityIndicatorView!
+    
     private let cellId = "CharacterListEntryCell"
-    private var errorView : UIView?
-    private var spinner: UIActivityIndicatorView!
         
     init(presenter: CharacterListScreenPresenterProtocol) {
         self.presenter = presenter
@@ -93,13 +95,13 @@ class CharacterListScreenViewController: UIViewController {
     }
     
     private func showTableView() {
-        self.tableView.isHidden = false
+        self.tableView?.isHidden = false
         self.removeErrorView()
         self.spinner.stopAnimating()
     }
     
     private func hideTableView() {
-        self.tableView.isHidden = true
+        self.tableView?.isHidden = true
     }
     
     private func showSpinner() {
@@ -120,7 +122,7 @@ extension CharacterListScreenViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.tableView.deselectRow(at: indexPath, animated: true)
+        self.tableView?.deselectRow(at: indexPath, animated: true)
         self.presenter.didSelectCharacterAt(index: indexPath.row)
     }
     
@@ -171,13 +173,16 @@ extension CharacterListScreenViewController: CharacterListScreenViewControllerPr
     func updateListInfo(info: CharacterListViewModel, postReloadActions: (() -> Void)?) {
         self.showTableView()
         self.model = info
-        self.tableView.reloadData()
+        self.tableView?.reloadData()
         postReloadActions?()
     }
     
     func scrollToTop(animated: Bool) {
-        let top = CGPoint(x: 0, y: -self.tableView.contentInset.top)
-        self.tableView.setContentOffset(top, animated: animated)
+        guard let tableV = self.tableView else {
+            return
+        }
+        let top = CGPoint(x: 0, y: -tableV.contentInset.top)
+        tableV.setContentOffset(top, animated: animated)
     }
     
     func displayErrorWithRetry() {
