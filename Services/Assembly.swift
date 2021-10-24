@@ -18,7 +18,7 @@ class AppServices {
     }
 }
 
-class Assembly: NSObject {
+class Assembly {
     static var shared = Assembly()
     
     func provideCharactersService() -> CharactersServiceOperationProtocol {

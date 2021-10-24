@@ -181,8 +181,10 @@ extension CharacterListScreenViewController: CharacterListScreenViewControllerPr
     }
     
     func displayErrorWithRetry() {
-        self.tableView.isHidden = true
         self.removeErrorView()
+        self.hideTableView()
+        self.hideSpinner()
+        
         let newErrorView = UIView()
         newErrorView.translatesAutoresizingMaskIntoConstraints = true
         newErrorView.autoresizingMask = [.flexibleWidth, .flexibleHeight]

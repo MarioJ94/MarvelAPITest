@@ -25,6 +25,8 @@
 		7A3AC9282725A39500DF002B /* CharacterDetailsScreenPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3AC9262725A39500DF002B /* CharacterDetailsScreenPresenter.swift */; };
 		7A3AC92A2725A3A500DF002B /* CharacterDetailsScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3AC9292725A3A500DF002B /* CharacterDetailsScreenViewController.swift */; };
 		7A3AC92B2725A3A500DF002B /* CharacterDetailsScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3AC9292725A3A500DF002B /* CharacterDetailsScreenViewController.swift */; };
+		7A3AC92D2725AC1A00DF002B /* GetCharactersRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3AC92C2725AC1A00DF002B /* GetCharactersRequestParams.swift */; };
+		7A3AC92E2725AC1A00DF002B /* GetCharactersRequestParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3AC92C2725AC1A00DF002B /* GetCharactersRequestParams.swift */; };
 		7ABE1114272576F4009C4E9F /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 7ABE1113272576F4009C4E9F /* SDWebImage */; };
 		7ABE11782725770E009C4E9F /* CharacterListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ABE11182725770E009C4E9F /* CharacterListViewModel.swift */; };
 		7ABE11792725770E009C4E9F /* CharacterListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ABE11182725770E009C4E9F /* CharacterListViewModel.swift */; };
@@ -178,6 +180,7 @@
 		7A3AC9222725A34700DF002B /* CharacterDetailsViewModelMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsViewModelMapper.swift; sourceTree = "<group>"; };
 		7A3AC9262725A39500DF002B /* CharacterDetailsScreenPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsScreenPresenter.swift; sourceTree = "<group>"; };
 		7A3AC9292725A3A500DF002B /* CharacterDetailsScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailsScreenViewController.swift; sourceTree = "<group>"; };
+		7A3AC92C2725AC1A00DF002B /* GetCharactersRequestParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCharactersRequestParams.swift; sourceTree = "<group>"; };
 		7A6CB99C272574BA0031C8F1 /* MarvelAPITest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarvelAPITest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A6CB9A2272574BA0031C8F1 /* MarvelAPITest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarvelAPITest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A6CB9A9272574BB0031C8F1 /* Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -631,6 +634,7 @@
 				7ABE11642725770E009C4E9F /* CharactersAPIOperationProtocol.swift */,
 				7ABE11652725770E009C4E9F /* CharactersAPIOperationError.swift */,
 				7ABE11662725770E009C4E9F /* CharactersAPI.swift */,
+				7A3AC92C2725AC1A00DF002B /* GetCharactersRequestParams.swift */,
 			);
 			path = CharactersAPI;
 			sourceTree = "<group>";
@@ -876,6 +880,7 @@
 				7ABE11902725770E009C4E9F /* Main.swift in Sources */,
 				7ABE11882725770E009C4E9F /* GetCharacterList.swift in Sources */,
 				7ABE11E22725770E009C4E9F /* ComicList.swift in Sources */,
+				7A3AC92D2725AC1A00DF002B /* GetCharactersRequestParams.swift in Sources */,
 				7ABE11E42725770E009C4E9F /* CharacterListContainer.swift in Sources */,
 				7ABE117E2725770E009C4E9F /* CharacterListScreenViewController.swift in Sources */,
 				7ABE11842725770E009C4E9F /* CharacterListViewModelMapper.swift in Sources */,
@@ -919,6 +924,7 @@
 				7ABE11912725770E009C4E9F /* Main.swift in Sources */,
 				7ABE11892725770E009C4E9F /* GetCharacterList.swift in Sources */,
 				7ABE11E32725770E009C4E9F /* ComicList.swift in Sources */,
+				7A3AC92E2725AC1A00DF002B /* GetCharactersRequestParams.swift in Sources */,
 				7ABE11E52725770E009C4E9F /* CharacterListContainer.swift in Sources */,
 				7ABE117F2725770E009C4E9F /* CharacterListScreenViewController.swift in Sources */,
 				7ABE11852725770E009C4E9F /* CharacterListViewModelMapper.swift in Sources */,

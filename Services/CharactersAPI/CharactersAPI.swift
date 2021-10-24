@@ -9,12 +9,14 @@ import Foundation
 import Combine
 
 class CharactersAPI {
-    private enum domain {
-        static let baseUrl = "https://gateway.marvel.com:443"
+    private static let baseUrl = "gateway.marvel.com"
+    private enum schemes {
+        static let https = "https"
     }
-    private enum path {
-        static let getCharactersPath = "v1/public/characters?"
+    private enum paths {
+        static let getCharactersPath = "/v1/public/characters"
     }
+    
     private enum params {
         static let apiKey = "apikey"
         static let timestamp = "ts"
@@ -22,26 +24,14 @@ class CharactersAPI {
         static let offset = "offset"
         static let limit = "limit"
     }
-    
-    private enum endpoints {
-        static let getCharacters = URL(fileURLWithPath: domain.baseUrl).appendingPathComponent(path.getCharactersPath)
-    }
-    
-    init() {}
-}
-
-struct GetCharactersRequestParams {
-    let offset : Int
-    let limit : Int
 }
 
 extension CharactersAPI : CharactersAPIOperationProtocol {
     func getCharacters(queryParams: GetCharactersRequestParams) -> AnyPublisher<CharacterList, CharactersAPIOperationError> {
         var urlComponents = URLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = "gateway.marvel.com"
-//        urlComponents.port = 443
-        urlComponents.path = "/v1/public/characters"
+        urlComponents.scheme = schemes.https
+        urlComponents.host = CharactersAPI.baseUrl
+        urlComponents.path = paths.getCharactersPath
         urlComponents.queryItems = [
             URLQueryItem(name: params.apiKey, value: "c71666311bd5694544364eb278ea8103"),
             URLQueryItem(name: params.timestamp, value: "1000"),
