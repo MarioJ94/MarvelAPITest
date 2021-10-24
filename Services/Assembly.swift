@@ -28,15 +28,14 @@ class Assembly: NSObject {
     }
     
     func provideCharacterListScreen() -> (screen: UIViewController, presenter: CharacterListScreenPresenterUseCase) {
-        let vc = CharacterListScreenViewController()
         let getCharacterList = GetCharacterList(service: AppServices.shared.charactersService)
         let characterListEntryViewModelMapper = CharacterListEntryViewModelMapper()
         let characterListViewModelMapper = CharacterListViewModelMapper(characterEntryMapper: characterListEntryViewModelMapper)
-        let presenter = CharacterListScreenPresenter(view: vc,
-                                                     getCharactersList: getCharacterList,
+        let presenter = CharacterListScreenPresenter(getCharactersList: getCharacterList,
                                                      characterListViewModelMapper: characterListViewModelMapper,
                                                      itemsPerPage: 100)
-        vc.setPresenter(presenter: presenter)
+        let vc = CharacterListScreenViewController(presenter: presenter)
+        presenter.setView(view: vc)
         return (vc, presenter)
     }
     

@@ -9,19 +9,20 @@ import Foundation
 import UIKit
 
 class CharacterListScreenViewController: UIViewController {
-    private var presenter : CharacterListScreenPresenterProtocol?
+    private var presenter : CharacterListScreenPresenterProtocol
     private var model : CharacterListViewModel?
     private var tableView : UITableView!
     private let cellId = "CharacterListEntryCell"
     private var errorView : UIView?
     private var spinner: UIActivityIndicatorView!
-    
-    init() {
+        
+    init(presenter: CharacterListScreenPresenterProtocol) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("init(coder:) is not supported")
     }
     
     override func viewDidLoad() {
@@ -39,7 +40,7 @@ class CharacterListScreenViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        presenter?.freshLoad()
+        presenter.freshLoad()
     }
     
     func setPresenter(presenter: CharacterListScreenPresenterProtocol) {
@@ -120,7 +121,7 @@ extension CharacterListScreenViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
-        self.presenter?.didSelectCharacterAt(index: indexPath.row)
+        self.presenter.didSelectCharacterAt(index: indexPath.row)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -132,7 +133,7 @@ extension CharacterListScreenViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        self.presenter?.didShowItem(atIndex: indexPath.row)
+        self.presenter.didShowItem(atIndex: indexPath.row)
     }
 }
 
@@ -148,10 +149,7 @@ extension CharacterListScreenViewController: UITableViewDataSource {
         entryCell.separatorInset = .zero
         entryCell.layoutMargins = .zero
         
-        guard let rowLoc = self.presenter?.pageAndIndexForIndex(index: indexPath.row) else {
-            return entryCell
-        }
-        
+        let rowLoc = self.presenter.pageAndIndexForIndex(index: indexPath.row)
         guard let rowViewModel = self.model?.characters[rowLoc.page]?[optional: rowLoc.index] else {
             entryCell.setLoading()
             return entryCell
@@ -217,7 +215,7 @@ extension CharacterListScreenViewController: CharacterListScreenViewControllerPr
     func displayPopupReloadPage(page: Int) {
         let popup = UIAlertController(title: "Reload", message: "Do you want to reload this content of page \(page)?", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { [weak self] act in
-            self?.presenter?.reloadPage(page: page)
+            self?.presenter.reloadPage(page: page)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         popup.addAction(okAction)
@@ -232,6 +230,6 @@ extension CharacterListScreenViewController: CharacterListScreenViewControllerPr
     @objc func didTapRetry() {
         self.removeErrorView()
         self.showSpinner()
-        self.presenter?.freshLoad()
+        self.presenter.freshLoad()
     }
 }

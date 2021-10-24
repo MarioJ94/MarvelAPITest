@@ -14,3 +14,7 @@ protocol CharacterDetailsScreenPresenterUseCase {
 protocol CharacterDetailsScreenViewControllerProtocol: AnyObject {
     
 }
+
+protocol CharacterDetailsScreenPresenterProtocol {
+    
+}

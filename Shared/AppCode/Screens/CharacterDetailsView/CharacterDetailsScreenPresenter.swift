@@ -19,6 +19,10 @@ class CharacterDetailsScreenPresenter {
     }
 }
 
+extension CharacterDetailsScreenPresenter: CharacterDetailsScreenPresenterProtocol {
+    
+}
+
 extension CharacterDetailsScreenPresenter: CharacterDetailsScreenPresenterUseCase {
 
 }

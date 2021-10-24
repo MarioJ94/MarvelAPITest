@@ -27,14 +27,16 @@ class CharacterListScreenPresenter {
         return viewModel
     }
     
-    init(view: CharacterListScreenViewControllerProtocol,
-         getCharactersList: GetCharacterListUseCase,
+    init(getCharactersList: GetCharacterListUseCase,
          characterListViewModelMapper: CharacterListViewModelMapperUseCase,
          itemsPerPage: Int) {
-        self.view = view
         self.getCharactersList = getCharactersList
         self.characterListViewModelMapper = characterListViewModelMapper
         self.itemsPerPage = itemsPerPage
+    }
+    
+    func setView(view: CharacterListScreenViewControllerProtocol) {
+        self.view = view
     }
     
     // MARK: - Private methods

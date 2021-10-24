@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 class CharacterDetailsScreenViewController: UIViewController {
-    private var presenter: CharacterDetailsScreenPresenterUseCase
+    private var presenter: CharacterDetailsScreenPresenterProtocol
     
-    init(presenter: CharacterDetailsScreenPresenterUseCase) {
+    init(presenter: CharacterDetailsScreenPresenterProtocol) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
