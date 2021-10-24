@@ -7,19 +7,19 @@
 
 import Foundation
 
-
 protocol CharacterListViewModelMapperUseCase {
     func execute(with listModel: CharacterList) throws -> CharacterListMapResult
 }
+
+enum CharacterListViewModelMapperError : Error {
+    case NoTotal
+}
+
 class CharacterListViewModelMapper {
     private let characterEntryMapper : CharacterListEntryViewModelMapperUseCase
     init(characterEntryMapper: CharacterListEntryViewModelMapperUseCase) {
         self.characterEntryMapper = characterEntryMapper
     }
-}
-
-enum CharacterListViewModelMapperError : Error {
-    case NoTotal
 }
 
 extension CharacterListViewModelMapper: CharacterListViewModelMapperUseCase {

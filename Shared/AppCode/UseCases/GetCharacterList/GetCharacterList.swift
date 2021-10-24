@@ -10,7 +10,7 @@ import Combine
 
 // MARK: - GetCharacterListUseCase
 protocol GetCharacterListUseCase {
-    func execute(withParams params: GetCharactersRequestParams) -> AnyPublisher<CharacterList, CharacterServiceOperationError>
+    func execute(withParams params: GetCharactersListRequestParams) -> AnyPublisher<CharacterList, CharacterServiceOperationError>
 }
 
 // MARK: - GetCharacterList
@@ -22,7 +22,7 @@ class GetCharacterList {
 }
 
 extension GetCharacterList: GetCharacterListUseCase {
-    func execute(withParams params: GetCharactersRequestParams) -> AnyPublisher<CharacterList, CharacterServiceOperationError> {
+    func execute(withParams params: GetCharactersListRequestParams) -> AnyPublisher<CharacterList, CharacterServiceOperationError> {
         return self.service.getCharactersList(params: params)
     }
 }

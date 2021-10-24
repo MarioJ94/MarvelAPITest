@@ -94,7 +94,7 @@ class CharacterListScreenPresenter {
         }
         
         let mapper = self.characterListViewModelMapper
-        let initialParams = GetCharactersRequestParams(offset: page * self.itemsPerPage, limit: self.itemsPerPage)
+        let initialParams = GetCharactersListRequestParams(offset: page * self.itemsPerPage, limit: self.itemsPerPage)
         let subscription = self.getCharactersList.execute(withParams: initialParams).tryMap({ list -> CharacterListMapResult in
             let mapped = try mapper.execute(with: list)
             return mapped

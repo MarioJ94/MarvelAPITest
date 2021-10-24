@@ -9,5 +9,6 @@ import Foundation
 import Combine
 
 protocol CharactersAPIOperationProtocol {
-    func getCharacters(queryParams: GetCharactersRequestParams) -> AnyPublisher<CharacterList, CharactersAPIOperationError>
+    func getCharacter(queryParams: GetCharacterRequestParams) -> AnyPublisher<CharacterList, CharactersAPIOperationError>
+    func getCharacters(queryParams: GetCharactersListRequestParams) -> AnyPublisher<CharacterList, CharactersAPIOperationError>
 }

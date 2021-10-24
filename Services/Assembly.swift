@@ -41,8 +41,20 @@ class Assembly {
     
     func provideCharacterDetailsScreen(withCharacter character: Character) -> (screen: UIViewController, presenter: CharacterDetailsScreenPresenterUseCase) {
         let characterDetailsViewModelMapper = CharacterDetailsViewModelMapper()
-        let presenter = CharacterDetailsScreenPresenter(characterDetailsViewModelMapper: characterDetailsViewModelMapper,
-                                                        character: character)
+        let getCharacter = GetPreloadedCharacter(character: character)
+        let presenter = CharacterDetailsScreenPresenter(getCharacter: getCharacter,
+                                                        characterDetailsViewModelMapper: characterDetailsViewModelMapper)
+        let vc = CharacterDetailsScreenViewController(presenter: presenter)
+        presenter.setView(view: vc)
+        return (vc, presenter)
+    }
+    
+    func provideCharacterDetailsScreen(withCharacterId characterId: String) -> (screen: UIViewController, presenter: CharacterDetailsScreenPresenterUseCase) {
+        let params = GetCharacterRequestParams(id: characterId)
+        let getCharacter = GetCharacter(service: AppServices.shared.charactersService, params: params)
+        let characterDetailsViewModelMapper = CharacterDetailsViewModelMapper()
+        let presenter = CharacterDetailsScreenPresenter(getCharacter: getCharacter,
+                                                        characterDetailsViewModelMapper: characterDetailsViewModelMapper)
         let vc = CharacterDetailsScreenViewController(presenter: presenter)
         presenter.setView(view: vc)
         return (vc, presenter)

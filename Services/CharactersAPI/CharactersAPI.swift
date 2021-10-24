@@ -27,7 +27,37 @@ class CharactersAPI {
 }
 
 extension CharactersAPI : CharactersAPIOperationProtocol {
-    func getCharacters(queryParams: GetCharactersRequestParams) -> AnyPublisher<CharacterList, CharactersAPIOperationError> {
+    func getCharacter(queryParams: GetCharacterRequestParams) -> AnyPublisher<CharacterList, CharactersAPIOperationError> {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = schemes.https
+        urlComponents.host = CharactersAPI.baseUrl
+        urlComponents.path = "\(paths.getCharactersPath)/\(queryParams.id)"
+        urlComponents.queryItems = [
+            URLQueryItem(name: params.apiKey, value: "c71666311bd5694544364eb278ea8103"),
+            URLQueryItem(name: params.timestamp, value: "1000"),
+            URLQueryItem(name: params.hash, value: "8ea83c24ebb5a94fa1fcf3dc5b89590d")
+        ]
+        guard let url = urlComponents.url else {
+            return Fail<CharacterList,CharactersAPIOperationError>(error: CharactersAPIOperationError.urlCompositionError).eraseToAnyPublisher()
+        }
+        
+        return URLSession.shared.dataTaskPublisher(for: url).mapError { error -> CharactersAPIOperationError in
+            return .requestError(error: error)
+        }.tryMap({ element in
+            guard let httpResponse = element.response as? HTTPURLResponse else {
+                throw CharactersAPIOperationError.emptyResponse
+            }
+            
+            guard httpResponse.statusCode == 200 else {
+                throw CharactersAPIOperationError.statusCodeUnhandled(statusCode: httpResponse.statusCode)
+            }
+            return element.data
+        }).decode(type: CharacterList.self, decoder: JSONDecoder())
+            .mapError { CharactersAPIOperationError.decodingError(error: $0) }
+            .eraseToAnyPublisher()
+    }
+    
+    func getCharacters(queryParams: GetCharactersListRequestParams) -> AnyPublisher<CharacterList, CharactersAPIOperationError> {
         var urlComponents = URLComponents()
         urlComponents.scheme = schemes.https
         urlComponents.host = CharactersAPI.baseUrl

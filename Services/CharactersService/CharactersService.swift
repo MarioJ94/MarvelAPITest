@@ -17,26 +17,38 @@ class CharactersService {
 }
 
 extension CharactersService : CharactersServiceOperationProtocol {
-    func getCharactersList(params: GetCharactersRequestParams) -> AnyPublisher<CharacterList, CharacterServiceOperationError> {
+    func getCharacter(params: GetCharacterRequestParams) -> AnyPublisher<CharacterList, CharacterServiceOperationError> {
+        return api.getCharacter(queryParams: params).mapError { err -> CharacterServiceOperationError in
+            return err.toServiceOperationError
+        }.eraseToAnyPublisher()
+    }
+    
+    func getCharactersList(params: GetCharactersListRequestParams) -> AnyPublisher<CharacterList, CharacterServiceOperationError> {
         return api.getCharacters(queryParams: params).mapError { err -> CharacterServiceOperationError in
-            switch err {
-            case .requestError(_):
-                return CharacterServiceOperationError.couldNotFechCharacterList
-            case .unknownError:
-                return CharacterServiceOperationError.couldNotFechCharacterList
-            case .decodingError(_):
-                return CharacterServiceOperationError.couldNotFechCharacterList
-            case .emptyResponse:
-                return CharacterServiceOperationError.couldNotFechCharacterList
-            case .statusCodeUnhandled(_):
-                return CharacterServiceOperationError.couldNotFechCharacterList
-            case .urlCompositionError:
-                return CharacterServiceOperationError.couldNotFechCharacterList
-            }
+            return err.toServiceOperationError
         }.eraseToAnyPublisher()
     }
 }
 
+extension CharactersAPIOperationError {
+    fileprivate var toServiceOperationError: CharacterServiceOperationError {
+        switch self {
+        case .requestError(_):
+            return CharacterServiceOperationError.couldNotFetchCharacterList
+        case .unknownError:
+            return CharacterServiceOperationError.couldNotFetchCharacterList
+        case .decodingError(_):
+            return CharacterServiceOperationError.couldNotFetchCharacterList
+        case .emptyResponse:
+            return CharacterServiceOperationError.couldNotFetchCharacterList
+        case .statusCodeUnhandled(_):
+            return CharacterServiceOperationError.couldNotFetchCharacterList
+        case .urlCompositionError:
+            return CharacterServiceOperationError.couldNotFetchCharacterList
+        }
+    }
+}
+
 enum CharacterServiceOperationError: Error {
-    case couldNotFechCharacterList
+    case couldNotFetchCharacterList
 }
