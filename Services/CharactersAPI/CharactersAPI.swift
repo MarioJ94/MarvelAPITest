@@ -59,7 +59,3 @@ extension CharactersAPI : CharactersAPIOperationProtocol {
             .eraseToAnyPublisher()
     }
 }
-
-//apikey=c71666311bd5694544364eb278ea8103
-//ts=1000
-//hash=8ea83c24ebb5a94fa1fcf3dc5b89590d
