@@ -58,7 +58,7 @@ class CharacterListEntryCell : UITableViewCell {
             cellDetailsStack.topAnchor.constraint(equalTo: self.topAnchor),
             cellDetailsStack.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             cellDetailsStack.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10),
-            cellDetailsStack.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 10)
+            cellDetailsStack.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10)
         ])
         
         // thumbnail
@@ -69,14 +69,16 @@ class CharacterListEntryCell : UITableViewCell {
             thumbnail.heightAnchor.constraint(equalTo: cellDetailsStack.heightAnchor, multiplier: 0.8).setPriority(priority: .defaultHigh),
             thumbnail.widthAnchor.constraint(lessThanOrEqualTo: cellDetailsStack.widthAnchor, multiplier: 0.25)
         ])
-        
+        thumbnail.setContentCompressionResistancePriority(.required, for: .horizontal)
         // label
         cellDetailsStack.addArrangedSubview(label)
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: thumbnail.topAnchor),
             label.bottomAnchor.constraint(equalTo: thumbnail.bottomAnchor)
         ])
-        
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
     
     func resetCell() {
