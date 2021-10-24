@@ -16,7 +16,7 @@ class CharacterListScreenPresenter {
     
     private var subscriptions: [Int:AnyCancellable] = [:]
     private let itemsPerPage : Int
-    private var currentData : CharacterListViewModel = CharacterListViewModel(theoreticalTotal: 0, charactersPages: [:])
+    private var currentData = CharacterListModel(theoreticalTotal: 0, charactersPages: [:])
     
     init(view: CharacterListScreenViewControllerProtocol,
          getCharactersList: GetCharacterListUseCase,
@@ -38,16 +38,28 @@ extension CharacterListScreenPresenter : CharacterListScreenPresenterProtocol {
     
     func didSelectCharacterAt(index: Int) {
         let pageAndIndex = self.pageAndIndexForIndex(index: index)
-        guard let character = self.currentData.charactersPages[pageAndIndex.page]?.characters[pageAndIndex.index] else {
-            print("LOADING")
+        guard let dataPair = self.getMappedPairDataFor(pageAndIndex: pageAndIndex) else {
             return
         }
-        switch character.type {
+        switch dataPair.mappedData.type {
         case .error:
             self.view?.displayPopupReloadPage(page: pageAndIndex.page)
         case .success:
-            print("SUCCESS")
+            guard let character = dataPair.rawData else {
+                self.view?.displayPopupErrorCharacterAccess()
+                return
+            }
+            self.attemptNavigationToCharacter(character: character)
         }
+    }
+    
+    private func attemptNavigationToCharacter(character: Character) {
+        let detailsScreen = Assembly.shared.provideCharacterDetailsScreen(withCharacter: character)
+        self.view?.navigateToScreen(screen: detailsScreen.screen)
+    }
+    
+    private func getMappedPairDataFor(pageAndIndex: (page: Int, index: Int)) -> CharacterAndMappedCharacterPair? {
+        return self.currentData.charactersPages[pageAndIndex.page]?.pairs[optional: pageAndIndex.index]
     }
     
     func freshLoad() {
@@ -57,7 +69,7 @@ extension CharacterListScreenPresenter : CharacterListScreenPresenterProtocol {
                 return
             }
             self.appendData(forPage: page, mappedPage: mappedPage)
-            self.view?.updateListInfo(info: self.currentData, postReloadActions: {
+            self.view?.updateListInfo(info: self.currentDataMappedToViewModel(), postReloadActions: {
                 self.view?.scrollToTop(animated: false)
             })
         } onError: { [weak self] in
@@ -68,36 +80,45 @@ extension CharacterListScreenPresenter : CharacterListScreenPresenterProtocol {
         }
     }
     
+    private func currentDataMappedToViewModel() -> CharacterListViewModel {
+        var charactersPagesViewModel: [Int:[CharacterListEntryViewModel]] = [:]
+        self.currentData.charactersPages.forEach({ (key, value) in
+            charactersPagesViewModel[key] = value.pairs.map({ $0.mappedData })
+        })
+        let viewModel = CharacterListViewModel(theoreticalTotal: self.currentData.theoreticalTotal, characters: charactersPagesViewModel)
+        return viewModel
+    }
+    
     func reloadPage(page: Int) {
         var data = self.currentData.charactersPages
         data.removeValue(forKey: page)
-        let newData = CharacterListViewModel(theoreticalTotal: self.currentData.theoreticalTotal, charactersPages: data)
+        let newData = CharacterListModel(theoreticalTotal: self.currentData.theoreticalTotal, charactersPages: data)
         self.currentData = newData
-        self.view?.updateListInfo(info: self.currentData, postReloadActions: nil)
+        self.view?.updateListInfo(info: self.currentDataMappedToViewModel(), postReloadActions: nil)
         self.loadPage(page: page)
     }
     
     private func loadPage(page: Int) {
-        self.getItemsForPage(page: page) { [weak self] mappedPage in
+        self.getItemsForPage(page: page) { [weak self] mapResult in
             guard let self = self else {
                 return
             }
-            self.appendData(forPage: page, mappedPage: mappedPage)
-            self.view?.updateListInfo(info: self.currentData, postReloadActions: nil)
+            self.appendData(forPage: page, mappedPage: mapResult)
+            self.view?.updateListInfo(info: self.currentDataMappedToViewModel(), postReloadActions: nil)
         } onError: { [weak self] in
             guard let self = self else {
                 return
             }
             let errorData = self.buildErrorData(forPage: page)
             self.appendData(forPage: page, mappedPage: errorData)
-            self.view?.updateListInfo(info: self.currentData, postReloadActions: nil)
+            self.view?.updateListInfo(info: self.currentDataMappedToViewModel(), postReloadActions: nil)
         }
     }
     
-    private func appendData(forPage page: Int, mappedPage: CharacterListMapped) {
+    private func appendData(forPage page: Int, mappedPage: CharacterListMapResult) {
         var currentCharactersViewModels = self.currentData.charactersPages
-        currentCharactersViewModels[page] = mappedPage.charactersPage
-        let newData = CharacterListViewModel(theoreticalTotal: mappedPage.theoreticalTotal,
+        currentCharactersViewModels[page] = mappedPage.mappingPairs
+        let newData = CharacterListModel(theoreticalTotal: mappedPage.theoreticalTotal,
                                              charactersPages: currentCharactersViewModels)
         self.currentData = newData
     }
@@ -110,15 +131,16 @@ extension CharacterListScreenPresenter : CharacterListScreenPresenterProtocol {
         return self.subscriptions[page] != nil
     }
     
-    private func getItemsForPage(page: Int, onSuccess: @escaping (CharacterListMapped) -> Void, onError: @escaping () -> Void ) {
+    private func getItemsForPage(page: Int, onSuccess: @escaping (CharacterListMapResult) -> Void, onError: @escaping () -> Void ) {
         guard !self.hasData(forPage: page) && !self.hasOngoingRequest(forPage: page) else {
             return
         }
         
         let mapper = self.characterListViewModelMapper
         let initialParams = GetCharactersRequestParams(offset: page * self.itemsPerPage, limit: self.itemsPerPage)
-        let subscription = self.getCharactersList.execute(withParams: initialParams).tryMap({ list -> CharacterListMapped in
-            return try mapper.execute(with: list)
+        let subscription = self.getCharactersList.execute(withParams: initialParams).tryMap({ list -> CharacterListMapResult in
+            let mapped = try mapper.execute(with: list)
+            return mapped
         }).receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] compl in
                 guard let self = self else {
@@ -138,12 +160,13 @@ extension CharacterListScreenPresenter : CharacterListScreenPresenterProtocol {
         self.subscriptions[page] = subscription
     }
     
-    private func buildErrorData(forPage page:Int) -> CharacterListMapped {
-        let errorVideModel = CharacterListEntryViewModel.errorViewModel
-        let characterList = [CharacterListEntryViewModel](repeating: errorVideModel, count: self.itemsPerPage)
-        let page = CharacterListPage(startingIndex: page*self.itemsPerPage, characters: characterList)
-        let errorData = CharacterListMapped(theoreticalTotal: self.currentData.theoreticalTotal, charactersPage: page)
-        return errorData
+    private func buildErrorData(forPage page:Int) -> CharacterListMapResult {
+        let errorViewModel = CharacterListEntryViewModel.errorViewModel
+        let characterAndMappedChar = CharacterAndMappedCharacterPair(rawData: nil, mappedData: errorViewModel)
+        let characterPairs = [CharacterAndMappedCharacterPair](repeating: characterAndMappedChar, count: self.itemsPerPage)
+        let pagePairs = CharacterListPagePairs(pairs: characterPairs)
+        let mapResult = CharacterListMapResult(theoreticalTotal: self.currentData.theoreticalTotal, mappingPairs: pagePairs)
+        return mapResult
     }
     
     func didShowItem(atIndex index: Int) {

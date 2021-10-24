@@ -22,9 +22,9 @@ extension CharacterListEntryViewModelMapper: CharacterListEntryViewModelMapperUs
             let nsPath = path as NSString
             thumbnail = nsPath.appendingPathExtension(ext) ?? ""
         }
-        let _ = CharacterListEntryViewModel(type: .success,
+        let viewModel = CharacterListEntryViewModel(type: .success,
                                                     name: entryModel.name ?? "NO_NAME",
                                                     thumbnail: thumbnail)
-        return CharacterListEntryViewModel.errorViewModel
+        return viewModel
     }
 }

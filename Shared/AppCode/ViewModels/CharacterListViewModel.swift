@@ -7,18 +7,26 @@
 
 import Foundation
 
+struct CharacterListModel {
+    let theoreticalTotal : Int
+    let charactersPages: [Int:CharacterListPagePairs]
+}
+
+struct CharacterListMapResult {
+    let theoreticalTotal : Int
+    let mappingPairs : CharacterListPagePairs
+}
+
+struct CharacterListPagePairs {
+    let pairs : [CharacterAndMappedCharacterPair]
+}
+
+struct CharacterAndMappedCharacterPair {
+    let rawData : Character?
+    let mappedData : CharacterListEntryViewModel
+}
+
 struct CharacterListViewModel {
     let theoreticalTotal : Int
-    let charactersPages: [Int:CharacterListPage]
-}
-
-struct CharacterListMapped {
-    let theoreticalTotal : Int
-    let charactersPage: CharacterListPage
-}
-
-struct CharacterListPage {
-    let startingIndex : Int
-    let characters : [CharacterListEntryViewModel]
-
+    let characters : [Int:[CharacterListEntryViewModel]]
 }

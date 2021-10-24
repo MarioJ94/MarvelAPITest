@@ -26,4 +26,6 @@ protocol CharacterListScreenViewControllerProtocol: AnyObject {
     func scrollToTop(animated: Bool)
     func displayErrorWithRetry()
     func displayPopupReloadPage(page: Int)
+    func displayPopupErrorCharacterAccess()
+    func navigateToScreen(screen: UIViewController)
 }

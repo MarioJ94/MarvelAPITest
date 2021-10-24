@@ -26,8 +26,10 @@ class CharacterListScreenViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.configureView()
         self.configureTableView()
         self.configureSpinner()
+        self.showSpinner()
     }
     
     override func viewSafeAreaInsetsDidChange() {
@@ -51,6 +53,10 @@ class CharacterListScreenViewController: UIViewController {
         tableV.contentInset = newContentInset
     }
     
+    private func configureView() {
+        self.title = "Character List"
+    }
+    
     private func configureTableView() {
         let tableV = UITableView(frame: .zero, style: .plain)
         
@@ -71,8 +77,12 @@ class CharacterListScreenViewController: UIViewController {
     
     private func configureSpinner() {
         let newSp = UIActivityIndicatorView(style: .large)
-        newSp.color = .white
+        self.view.addSubview(newSp)
+        newSp.color = .black
         newSp.hidesWhenStopped = true
+        newSp.translatesAutoresizingMaskIntoConstraints = true
+        newSp.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        newSp.frame = self.view.bounds
         self.spinner = newSp
     }
     
@@ -152,7 +162,7 @@ extension CharacterListScreenViewController: UITableViewDataSource {
             return entryCell
         }
         
-        guard let rowViewModel = self.model?.charactersPages[rowLoc.page]?.characters[optional: rowLoc.index] else {
+        guard let rowViewModel = self.model?.characters[rowLoc.page]?[optional: rowLoc.index] else {
             entryCell.setLoading()
             return entryCell
         }
@@ -207,6 +217,13 @@ extension CharacterListScreenViewController: CharacterListScreenViewControllerPr
         ])
     }
     
+    func displayPopupErrorCharacterAccess() {
+        let popup = UIAlertController(title: "Error", message: "There was an error accessing content", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        popup.addAction(okAction)
+        self.present(popup, animated: true, completion: nil)
+    }
+    
     func displayPopupReloadPage(page: Int) {
         let popup = UIAlertController(title: "Reload", message: "Do you want to reload this content of page \(page)?", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { [weak self] act in
@@ -218,15 +235,13 @@ extension CharacterListScreenViewController: CharacterListScreenViewControllerPr
         self.present(popup, animated: true, completion: nil)
     }
     
+    func navigateToScreen(screen: UIViewController) {
+        self.navigationController?.pushViewController(screen, animated: true)
+    }
+    
     @objc func didTapRetry() {
         self.removeErrorView()
         self.showSpinner()
         self.presenter?.freshLoad()
-    }
-}
-
-extension Collection {
-    subscript(optional i: Index) -> Iterator.Element?{
-        return self.indices.contains(i) ? self[i] : nil
     }
 }

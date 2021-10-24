@@ -40,15 +40,7 @@ class Main : UIViewController {
         v.navigationBar.compactAppearance = appearance
         v.navigationBar.standardAppearance = appearance
         v.navigationBar.scrollEdgeAppearance = appearance
-        self.view.addSubview(v.view)
-        v.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            v.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-            v.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            v.view.leftAnchor.constraint(equalTo: self.view.leftAnchor),
-            v.view.rightAnchor.constraint(equalTo: self.view.rightAnchor)
-        ])
-        
+        self.add(v, inContainerView: self.view, withAutolayoutMatch: true)
         v.view.backgroundColor = .clear
         self.rootView = v
     }

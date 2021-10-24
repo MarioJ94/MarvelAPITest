@@ -9,7 +9,7 @@ import Foundation
 
 
 protocol CharacterListViewModelMapperUseCase {
-    func execute(with listModel: CharacterList) throws -> CharacterListMapped
+    func execute(with listModel: CharacterList) throws -> CharacterListMapResult
 }
 class CharacterListViewModelMapper {
     private let characterEntryMapper : CharacterListEntryViewModelMapperUseCase
@@ -19,21 +19,23 @@ class CharacterListViewModelMapper {
 }
 
 enum CharacterListViewModelMapperError : Error {
-    case NoStartingIndex
+    case NoTotal
 }
 
 extension CharacterListViewModelMapper: CharacterListViewModelMapperUseCase {
-    func execute(with listModel: CharacterList) throws -> CharacterListMapped {
+    func execute(with listModel: CharacterList) throws -> CharacterListMapResult {
         let entryMapper = self.characterEntryMapper
-        let characters : [CharacterListEntryViewModel] = listModel.data?.results?.map({ entry -> CharacterListEntryViewModel in
-            return entryMapper.execute(with: entry)
+        let characters : [CharacterAndMappedCharacterPair] = listModel.data?.results?.map({ entry -> CharacterAndMappedCharacterPair in
+            let mapped = entryMapper.execute(with: entry)
+            let rawAndMappedPair = CharacterAndMappedCharacterPair(rawData: entry, mappedData: mapped)
+            return rawAndMappedPair
         }) ?? []
-        guard let startingIndex = listModel.data?.offset else {
-            throw CharacterListViewModelMapperError.NoStartingIndex
+        guard let total = listModel.data?.total else {
+            throw CharacterListViewModelMapperError.NoTotal
         }
-        let page = CharacterListPage(startingIndex: startingIndex, characters: characters)
-        let listViewModel = CharacterListMapped(theoreticalTotal: listModel.data?.total ?? 0, charactersPage: page)
-        return listViewModel
+        let pair = CharacterListPagePairs(pairs: characters)
+        let result = CharacterListMapResult(theoreticalTotal: total, mappingPairs: pair)
+        return result
     }
 }
                                                                                                                                             

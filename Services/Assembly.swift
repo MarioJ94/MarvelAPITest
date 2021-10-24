@@ -39,5 +39,13 @@ class Assembly: NSObject {
         vc.setPresenter(presenter: presenter)
         return (vc, presenter)
     }
+    
+    func provideCharacterDetailsScreen(withCharacter character: Character) -> (screen: UIViewController, presenter: CharacterDetailsScreenPresenterUseCase) {
+        let characterDetailsViewModelMapper = CharacterDetailsViewModelMapper()
+        let presenter = CharacterDetailsScreenPresenter(characterDetailsViewModelMapper: characterDetailsViewModelMapper,
+                                                        character: character)
+        let vc = CharacterDetailsScreenViewController(presenter: presenter)
+        presenter.setView(view: vc)
+        return (vc, presenter)
+    }
 }
-
