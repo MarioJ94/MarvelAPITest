@@ -27,11 +27,3 @@ extension CharacterListEntryViewModelMapper: CharacterListEntryViewModelMapperUs
         return viewModel
     }
 }
-
-class Utils {
-    static func appendPathOfImage(path: String, withExtension ext: String) -> String {
-        let nsPath = path as NSString
-        let result = nsPath.appendingPathExtension(ext) ?? ""
-        return result
-    }
-}

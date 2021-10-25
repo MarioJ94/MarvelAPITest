@@ -11,3 +11,11 @@ import UIKit
 func currentDeviceType() -> UIUserInterfaceIdiom {
     return UIDevice.current.userInterfaceIdiom
 }
+
+class Utils {
+    static func appendPathOfImage(path: String, withExtension ext: String) -> String {
+        let nsPath = path as NSString
+        let result = nsPath.appendingPathExtension(ext) ?? ""
+        return result
+    }
+}
