@@ -8,5 +8,9 @@
 import Foundation
 
 struct GetCharacterRequestParams {
-    let id: String
+    let id: Int?
+}
+
+struct GetCharacterRequestApiParams {
+    let id: Int
 }

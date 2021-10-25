@@ -12,10 +12,11 @@ protocol CharacterDetailsScreenPresenterUseCase {
 }
 
 protocol CharacterDetailsScreenViewControllerProtocol: AnyObject {
-    func displayErrorRetrievingData()
+    func displayError(errorType: CharacterDetailsScreenDataFechError)
     func setInfo(viewModel: CharacterDetailsViewModel)
 }
 
 protocol CharacterDetailsScreenPresenterProtocol {
+    var comicsInteractionDelegate: CharacterDetailsComicsInfoDataContentPresenterDelegate { get }
     func freshLoad()
 }

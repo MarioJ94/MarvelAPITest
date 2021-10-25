@@ -49,7 +49,7 @@ class Assembly {
         return (vc, presenter)
     }
     
-    func provideCharacterDetailsScreen(withCharacterId characterId: String) -> (screen: UIViewController, presenter: CharacterDetailsScreenPresenterUseCase) {
+    func provideCharacterDetailsScreen(withCharacterId characterId: Int?) -> (screen: UIViewController, presenter: CharacterDetailsScreenPresenterUseCase) {
         let params = GetCharacterRequestParams(id: characterId)
         let getCharacter = GetCharacter(service: AppServices.shared.charactersService, params: params)
         let characterDetailsViewModelMapper = CharacterDetailsViewModelMapper()

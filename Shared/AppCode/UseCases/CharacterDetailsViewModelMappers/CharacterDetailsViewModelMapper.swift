@@ -21,12 +21,12 @@ class CharacterDetailsViewModelMapper {
 
 extension CharacterDetailsViewModelMapper: CharacterDetailsViewModelMapperUseCase {
     func execute(withCharacter character: Character) throws -> CharacterDetailsViewModel {
+        guard let name = character.name else {
+            throw CharacterDetailsViewModelMapperError.missingName
+        }
         var thumbnail : String? = nil
         if let path = character.thumbnail?["path"], let ext = character.thumbnail?["extension"] {
             thumbnail = Utils.appendPathOfImage(path: path, withExtension: ext)
-        }
-        guard let name = character.name else {
-            throw CharacterDetailsViewModelMapperError.missingName
         }
         let desc : String
         if let descrip = character.description, !descrip.isEmpty {
@@ -34,6 +34,17 @@ extension CharacterDetailsViewModelMapper: CharacterDetailsViewModelMapperUseCas
         } else {
             desc = "No description"
         }
-        return CharacterDetailsViewModel(name: name, description: desc, thumbnail: thumbnail)
+        let comics = character.comics?.items ?? []
+        var pairs : [ComicModelAndViewModel] = []
+        for comic in comics {
+            if let comicName = comic.name {
+                let comicViewModel = ComicViewModel(name: comicName)
+                let comicAndViewModel = ComicModelAndViewModel(model: comic, viewModel: comicViewModel)
+                pairs.append(comicAndViewModel)
+            }
+        }
+        let comicsCombinedModels = ComicsCombinedModels(comics: pairs)
+        
+        return CharacterDetailsViewModel(name: name, description: desc, thumbnail: thumbnail, comicsCombinedModel: comicsCombinedModels)
     }
 }

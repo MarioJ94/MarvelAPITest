@@ -25,7 +25,6 @@ class Main : UIViewController {
         super.viewDidLoad()
         self.configureView()
         self.configureContentView()
-        self.configureGoToCharactersButton()
     }
     
     private func configureView() {
@@ -37,38 +36,16 @@ class Main : UIViewController {
         let v = UINavigationController(rootViewController: firstScreen.screen)
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        appearance.shadowColor = .lightGray
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
         v.navigationBar.compactAppearance = appearance
         v.navigationBar.standardAppearance = appearance
         v.navigationBar.scrollEdgeAppearance = appearance
+        
         self.add(v, inContainerView: self.view, withAutolayoutMatch: true)
         v.view.backgroundColor = .clear
         self.rootView = v
-    }
-    
-    private func configureGoToCharactersButton() {
-//        let goToChar = UIButton()
-//        goToChar.backgroundColor = .red
-//        self.rootView.addSubview(goToChar)
-//
-//        goToChar.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            goToChar.widthAnchor.constraint(equalTo: self.contentView.widthAnchor, multiplier: 0.5),
-//            goToChar.heightAnchor.constraint(equalToConstant: 100),
-//            goToChar.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
-//            goToChar.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
-//        ])
-//
-//        goToChar.setTitle("Aasdf", for: .normal)
-//        goToChar.addTarget(self, action: #selector(goToCharTapped(sender:)), for: .touchUpInside)
-//
-//        self.goToCharactersListButton = goToChar
-    }
-    
-    private var subscriptions : [AnyCancellable] = []
-    
-    @objc
-    private func goToCharTapped(sender: UIButton) {
-        
     }
 }
 

@@ -18,7 +18,11 @@ class CharactersService {
 
 extension CharactersService : CharactersServiceOperationProtocol {
     func getCharacter(params: GetCharacterRequestParams) -> AnyPublisher<CharacterList, CharacterServiceOperationError> {
-        return api.getCharacter(queryParams: params).mapError { err -> CharacterServiceOperationError in
+        guard let id = params.id else {
+            return Fail<CharacterList, CharacterServiceOperationError>(error: CharacterServiceOperationError.missingCharacterId).eraseToAnyPublisher()
+        }
+        let apiParams = GetCharacterRequestApiParams(id: id)
+        return api.getCharacter(queryParams: apiParams).mapError { err -> CharacterServiceOperationError in
             return err.toServiceOperationError
         }.eraseToAnyPublisher()
     }
@@ -50,5 +54,6 @@ extension CharactersAPIOperationError {
 }
 
 enum CharacterServiceOperationError: Error {
+    case missingCharacterId
     case couldNotFetchCharacterList
 }

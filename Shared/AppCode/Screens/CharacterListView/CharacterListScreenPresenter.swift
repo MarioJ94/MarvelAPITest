@@ -57,7 +57,7 @@ class CharacterListScreenPresenter {
     // MARK: - Interaction
 
     private func attemptNavigationToCharacter(character: Character) {
-        let detailsScreen = Assembly.shared.provideCharacterDetailsScreen(withCharacter: character)
+        let detailsScreen = Assembly.shared.provideCharacterDetailsScreen(withCharacterId: character.id)
         self.view?.navigateToScreen(screen: detailsScreen.screen)
     }
     

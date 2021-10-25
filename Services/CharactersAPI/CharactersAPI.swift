@@ -27,7 +27,7 @@ class CharactersAPI {
 }
 
 extension CharactersAPI : CharactersAPIOperationProtocol {
-    func getCharacter(queryParams: GetCharacterRequestParams) -> AnyPublisher<CharacterList, CharactersAPIOperationError> {
+    func getCharacter(queryParams: GetCharacterRequestApiParams) -> AnyPublisher<CharacterList, CharactersAPIOperationError> {
         var urlComponents = URLComponents()
         urlComponents.scheme = schemes.https
         urlComponents.host = CharactersAPI.baseUrl
@@ -41,7 +41,7 @@ extension CharactersAPI : CharactersAPIOperationProtocol {
             return Fail<CharacterList,CharactersAPIOperationError>(error: CharactersAPIOperationError.urlCompositionError).eraseToAnyPublisher()
         }
         
-        return URLSession.shared.dataTaskPublisher(for: url).mapError { error -> CharactersAPIOperationError in
+        return URLSession.shared.dataTaskPublisher(for: url).print().mapError { error -> CharactersAPIOperationError in
             return .requestError(error: error)
         }.tryMap({ element in
             guard let httpResponse = element.response as? HTTPURLResponse else {

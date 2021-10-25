@@ -26,20 +26,30 @@ class CharacterDetailsScreenPresenter {
     }
 }
 
+enum myError: Error {
+    case errorDownload
+    case errorMapping
+}
+
 extension CharacterDetailsScreenPresenter: CharacterDetailsScreenPresenterProtocol {
     func freshLoad() {
         let mapper = self.characterDetailsViewModelMapper
         self.subscription = self.getCharacter.execute().tryMap({ char -> CharacterDetailsViewModel in
             return try mapper.execute(withCharacter: char)
-        }).sink { [weak self] compl in
+        }).receive(on: DispatchQueue.main)
+        .sink { [weak self] compl in
             switch compl {
             case .finished:
                 self?.subscription = nil
             case .failure(let error):
                 self?.subscription = nil
-                self?.view?.displayErrorRetrievingData()
-                print(error.localizedDescription)
-                
+                if error is GetCharacterError {
+                    self?.view?.displayError(errorType: .errorFetchingData)
+                } else if error is CharacterDetailsViewModelMapperError {
+                    self?.view?.displayError(errorType: .errorParsingData)
+                } else {
+                    self?.view?.displayError(errorType: .errorFetchingData)
+                }
             }
         } receiveValue: { [weak self] char in
             self?.view?.setInfo(viewModel: char)
@@ -48,5 +58,13 @@ extension CharacterDetailsScreenPresenter: CharacterDetailsScreenPresenterProtoc
 }
 
 extension CharacterDetailsScreenPresenter: CharacterDetailsScreenPresenterUseCase {
+    var comicsInteractionDelegate: CharacterDetailsComicsInfoDataContentPresenterDelegate {
+        return self
+    }
+}
 
+extension CharacterDetailsScreenPresenter: CharacterDetailsComicsInfoDataContentPresenterDelegate {
+    func didSelectModel(comic: ComicSummary) {
+        
+    }
 }

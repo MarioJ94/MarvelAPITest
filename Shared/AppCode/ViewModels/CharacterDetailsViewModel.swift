@@ -11,4 +11,5 @@ struct CharacterDetailsViewModel {
     let name: String
     let description: String
     let thumbnail : String?
+    let comicsCombinedModel : ComicsCombinedModels
 }

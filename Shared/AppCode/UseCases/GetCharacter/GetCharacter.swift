@@ -22,7 +22,7 @@ extension GetCharacter : GetCharacterUseCase {
     func execute() -> AnyPublisher<Character, GetCharacterError> {
         return self.service.getCharacter(params: self.params).mapError { err -> GetCharacterError in
             return GetCharacterError.characterListRetrievalError(error: err)
-        }.eraseToAnyPublisher().tryMap({ list -> Character in
+        }.tryMap({ list -> Character in
             guard let results = list.data?.results, let first = results.first else {
                 throw GetCharacterError.cantExtractCharacterInfo
             }
