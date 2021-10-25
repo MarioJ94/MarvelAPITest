@@ -44,11 +44,11 @@ extension CharacterDetailsScreenPresenter: CharacterDetailsScreenPresenterProtoc
             case .failure(let error):
                 self?.subscription = nil
                 if error is GetCharacterError {
-                    self?.view?.displayError(errorType: .errorFetchingData)
+                    self?.view?.displayError(errorType: .errorInitialFetchingData)
                 } else if error is CharacterDetailsViewModelMapperError {
-                    self?.view?.displayError(errorType: .errorParsingData)
+                    self?.view?.displayError(errorType: .errorInitialParsingData)
                 } else {
-                    self?.view?.displayError(errorType: .errorFetchingData)
+                    self?.view?.displayError(errorType: .errorInitialFetchingData)
                 }
             }
         } receiveValue: { [weak self] char in
@@ -65,6 +65,6 @@ extension CharacterDetailsScreenPresenter: CharacterDetailsScreenPresenterUseCas
 
 extension CharacterDetailsScreenPresenter: CharacterDetailsComicsInfoDataContentPresenterDelegate {
     func didSelectModel(comic: ComicSummary) {
-        
+        self.view?.displayError(errorType: .comicNavigationNotSupported)
     }
 }

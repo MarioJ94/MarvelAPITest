@@ -32,6 +32,12 @@ class CharacterDetailsComicsInfoDataStackViewPresenter {
 
 extension CharacterDetailsComicsInfoDataStackViewPresenter: CharacterDetailsComicsInfoDataContentPresenterProtocol {
     func didSelectViewModel(viewModel: ComicViewModel, atIndex index: Int) {
-        
+        guard let matchingModel = self.combinedModels.comics[optional: index] else {
+            return
+        }
+        guard matchingModel.viewModel == viewModel else {
+            return
+        }
+        self.delegate?.didSelectModel(comic: matchingModel.model)
     }
 }

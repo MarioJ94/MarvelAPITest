@@ -67,20 +67,23 @@ class CharacterDetailsComicsInfoDataStackView : UIView, CharacterDetailsComicsIn
 extension CharacterDetailsComicsInfoDataStackView: CharacterDetailsComicsInfoDataContentStackViewProtocol {
     func setInfo(viewModel: ComicsViewModel) {
         self.viewModel = viewModel
-        viewModel.comics.forEach { comicViewModel in
-            let label = UILabel()
+        viewModel.comics.enumerated().forEach({ element in
+            let label = CharacterDetailsComicsInfoDataEntryView(model: element.element, index: element.offset, delegate: self)
             label.translatesAutoresizingMaskIntoConstraints = false
-            label.textColor = .cyan
             label.numberOfLines = 1
-            let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.thick.rawValue]
-            let underlineAttributedString = NSAttributedString(string: comicViewModel.name, attributes: underlineAttribute)
-            label.attributedText = underlineAttributedString
+            label.textColor = .cyan
             self.stackOfComics.addArrangedSubview(label)
             NSLayoutConstraint.activate([
                 label.widthAnchor.constraint(equalTo: self.stackOfComics.widthAnchor)
             ])
-        }
+        })
         self.stackOfComics.setNeedsLayout()
         self.setNeedsLayout()
+    }
+}
+
+extension CharacterDetailsComicsInfoDataStackView: CharacterDetailsComicsInfoDataEntryViewDelegate {
+    func didTapOn(model: ComicViewModel, withIndex index: Int) {
+        self.presenter.didSelectViewModel(viewModel: model, atIndex: index)
     }
 }

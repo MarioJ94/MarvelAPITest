@@ -166,19 +166,24 @@ class CharacterDetailsScreenViewController: UIViewController {
 }
 
 enum CharacterDetailsScreenDataFechError {
-    case errorFetchingData
-    case errorParsingData
+    case errorInitialFetchingData
+    case errorInitialParsingData
+    case comicNavigationNotSupported
 }
 
 extension CharacterDetailsScreenViewController: CharacterDetailsScreenViewControllerProtocol {
     func displayError(errorType: CharacterDetailsScreenDataFechError) {
-        self.hideSpinner()
-        self.hideDetails()
         switch errorType {
-        case .errorFetchingData:
+        case .errorInitialFetchingData:
+            self.hideSpinner()
+            self.hideDetails()
             self.displayErrorFetchingData()
-        case .errorParsingData:
+        case .errorInitialParsingData:
+            self.hideSpinner()
+            self.hideDetails()
             self.displayErrorParsingData()
+        case .comicNavigationNotSupported:
+            self.displayComicNavigationNotSupportedError()
         }
     }
     
@@ -216,6 +221,13 @@ extension CharacterDetailsScreenViewController {
         let okAction = UIAlertAction(title: "OK", style: .default) { [weak self] act in
             self?.navigationController?.popViewController(animated: true)
         }
+        popup.addAction(okAction)
+        self.present(popup, animated: true, completion: nil)
+    }
+    
+    private func displayComicNavigationNotSupportedError() {
+        let popup = UIAlertController(title: "Too bad", message: "This feature is not available. Please pay to unlock.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Huh?", style: .default)
         popup.addAction(okAction)
         self.present(popup, animated: true, completion: nil)
     }

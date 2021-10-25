@@ -20,6 +20,10 @@ struct ComicsViewModel {
     let comics: [ComicViewModel]
 }
 
-struct ComicViewModel {
+struct ComicViewModel: Equatable {
     let name: String
+    
+    static func ==(lhs: ComicViewModel, rhs: ComicViewModel) -> Bool {
+        return lhs.name == rhs.name
+    }
 }
