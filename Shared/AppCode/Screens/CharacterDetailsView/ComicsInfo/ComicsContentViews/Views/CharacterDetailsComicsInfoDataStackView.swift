@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  CharacterDetailsComicsInfoDataStackView.swift
 //  MarvelAPITest
 //
 //  Created by Mario Julià on 25/10/21.

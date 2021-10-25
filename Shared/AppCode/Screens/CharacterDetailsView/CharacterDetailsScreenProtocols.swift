@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  CharacterDetailsScreenProtocols.swift
 //  MarvelAPITest
 //
 //  Created by Mario Julià on 24/10/21.
