@@ -37,7 +37,7 @@ class CharacterDetailsComicsInfoDataEmptyView: UIView, CharacterDetailsComicsInf
     }
     
     override var intrinsicContentSize: CGSize {
-        let height = self.messageLabel.intrinsicContentSize.height
+        let height = self.messageLabel.intrinsicContentSize.height + 40
         let width = self.frame.width
         return CGSize(width: width, height: height)
     }
@@ -47,9 +47,8 @@ class CharacterDetailsComicsInfoDataEmptyView: UIView, CharacterDetailsComicsInf
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             messageLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
-            messageLabel.topAnchor.constraint(equalTo: self.topAnchor),
-            messageLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
-            messageLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            messageLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            messageLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20)
         ])
     }
     

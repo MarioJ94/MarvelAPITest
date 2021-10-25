@@ -63,12 +63,11 @@ class CharacterDetailsComicsInfoDataView : UIView {
     private func configureEverything() {
         self.addSubview(comicsSectionTitle)
         comicsSectionTitle.translatesAutoresizingMaskIntoConstraints = false
-        let minTitleHeight = comicsSectionTitle.font.lineHeight
+        
         NSLayoutConstraint.activate([
             comicsSectionTitle.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             comicsSectionTitle.topAnchor.constraint(equalTo: self.topAnchor),
-            comicsSectionTitle.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
-            comicsSectionTitle.heightAnchor.constraint(greaterThanOrEqualToConstant: minTitleHeight)
+            comicsSectionTitle.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
         ])
     }
     

@@ -58,22 +58,19 @@ class CharacterDetailsMainInfoDataView : UIView {
     private func configureEverything() {
         self.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        let minTitleHeight = descriptionLabel.font.lineHeight
+        
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             titleLabel.topAnchor.constraint(equalTo: self.topAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
-            titleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: minTitleHeight)
+            titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
         ])
         
-        let minDescHeight = descriptionLabel.font.lineHeight
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(descriptionLabel)
         NSLayoutConstraint.activate([
             descriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             descriptionLabel.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: 15),
-            descriptionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
-            descriptionLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: minDescHeight)
+            descriptionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10)
         ])
     }
     
