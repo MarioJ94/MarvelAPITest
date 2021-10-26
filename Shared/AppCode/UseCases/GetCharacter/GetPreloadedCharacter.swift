@@ -17,7 +17,7 @@ class GetPreloadedCharacter {
 
 extension GetPreloadedCharacter: GetCharacterUseCase {
     func execute() -> AnyPublisher<Character, GetCharacterError> {
-        let passthroughSubject = CurrentValueSubject<Character, GetCharacterError>(character)
-        return passthroughSubject.first().eraseToAnyPublisher()
+        let publisher = CurrentValueSubject<Character, GetCharacterError>(character)
+        return publisher.first().eraseToAnyPublisher()
     }
 }
