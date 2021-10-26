@@ -2,7 +2,7 @@
 
 This is a technical test that, with a 1-week time limit, demonstrates current knowledge of iOS development. 
 
-It uses Swift, UIKit and Combine, communicating with [Marvel's API](https://developer.marvel.com/docs) using a simple URLSession.
+It uses Swift, UIKit and Combine, communicating with [Marvel's API](https://developer.marvel.com/docs) by simple URLSession usage.
 Unit tests are used for guaranteeing that proper decoding of the JSON responses was done successfully.
 
 ## Implementation
