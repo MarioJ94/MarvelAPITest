@@ -29,7 +29,7 @@ extension CharacterDetailsViewModelMapper: CharacterDetailsViewModelMapperUseCas
             thumbnail = Utils.appendPathOfImage(path: path, withExtension: ext)
         }
         let desc : String
-        if let descrip = character.description, !descrip.isEmpty {
+        if let descrip = character.description, !descrip.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             desc = descrip
         } else {
             desc = "No description"
@@ -37,7 +37,7 @@ extension CharacterDetailsViewModelMapper: CharacterDetailsViewModelMapperUseCas
         let comics = character.comics?.items ?? []
         var pairs : [ComicModelAndViewModel] = []
         for comic in comics {
-            if let comicName = comic.name {
+            if let comicName = comic.name, !comicName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 let comicViewModel = ComicViewModel(name: comicName)
                 let comicAndViewModel = ComicModelAndViewModel(model: comic, viewModel: comicViewModel)
                 pairs.append(comicAndViewModel)

@@ -21,8 +21,14 @@ extension CharacterListEntryViewModelMapper: CharacterListEntryViewModelMapperUs
         if let path = entryModel.thumbnail?["path"], let ext = entryModel.thumbnail?["extension"] {
             thumbnail = Utils.appendPathOfImage(path: path, withExtension: ext)
         }
+        let name : String
+        if let charName = entryModel.name, !charName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            name = charName
+        } else {
+            name = "NO_NAME"
+        }
         let viewModel = CharacterListEntryViewModel(type: .success,
-                                                    name: entryModel.name ?? "NO_NAME",
+                                                    name: name,
                                                     thumbnail: thumbnail)
         return viewModel
     }
